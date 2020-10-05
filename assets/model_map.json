@@ -1,0 +1,18 @@
+{
+  "grid": [
+    [
+      {"move_penalty": 0.75, "defense": 1, "avoid": 2}, {}, {}
+    ],
+    [
+      {}, {}, {}
+    ],
+    [
+      {}, {}, {}
+    ]
+  ],
+  "units": 2,
+  "starting_positions": [
+    [0, 0],
+    [0, 1]
+  ]
+}
