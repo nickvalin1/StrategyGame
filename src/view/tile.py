@@ -7,6 +7,6 @@ class Tile:
         self.sprite = tile_set[index]
         self.width, self.height = self.sprite.get_size()
 
-    def render(self, screen, x, y):
+    def render(self, screen, x, y, rect):
         coordinates = x * self.width, y * self.height
-        screen.blit(self.sprite, coordinates)
+        screen.blit(self.sprite, coordinates, area=rect)

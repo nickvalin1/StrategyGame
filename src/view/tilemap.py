@@ -5,7 +5,7 @@ from view.tile import Tile
 
 class TileMap:
 
-    def __init__(self, filename):
+    def __init__(self, filename, map_screen):
         with open(filename) as file:
             self.source = json.load(file)
         image = self.source["tilesets"][0]["image"]
@@ -22,6 +22,8 @@ class TileMap:
                 self.tile_list.append([tile])
             else:
                 self.tile_list[x].append(tile)
+        self.map_screen = map_screen
+        self.range = ((0, self.map_screen.width // self.scale), (0, self.map_screen.height // self.scale))
 
     @staticmethod
     def load_tile_set(filename, width, height):
@@ -38,8 +40,15 @@ class TileMap:
                 tile_set.append(tile_source)
         return tile_set
 
-    def render(self, screen):
-        for y, row in enumerate(self.tile_list):
-            for x, tile in enumerate(row):
-                tile.render(screen, x, y)
-        pygame.display.flip()
+    def render(self, map_screen, rect, flip):
+        map_screen.fill((255, 255, 255), rect)
+        flip()
+        i = 0
+        for x in range(*self.range[0]):
+            j = 0
+            for y in range(*self.range[1]):
+                tile = self.tile_list[y][x]
+                tile.render(map_screen, i, j, rect)
+                j += 1
+            i += 1
+        flip()
