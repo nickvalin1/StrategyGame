@@ -22,11 +22,11 @@ class GameMap:
     def build_grid(self, map_doc):
         tiles = map_doc["tilesets"][0]["tiles"]
         grid = []
-        properties = {tile["id"]: tile["properties"] for tile in tiles}
+        property_set = {tile["id"]: {prop["name"]: prop["value"] for prop in tile["properties"]} for tile in tiles}
         for i, code in enumerate(map_doc["layers"][0]["data"]):
             x = i // map_doc["width"]
             y = i % map_doc["width"]
-            properties = properties.get(code, {})
+            properties = property_set.get(code - 1, {})
             if y == 0:
                 grid.append([MapSpace(x, y, **properties)])
             else:
@@ -43,16 +43,29 @@ class GameMap:
         space = self.grid[new_y][new_x]
         return space
 
+    def get_current_tile(self):
+        return self.grid[self.x][self.y]
+
 
 class MapSpace:
 
-    def __init__(self, x, y, move_penalty=1, defense=0, avoid=0):
+    def __init__(self, x, y, move_penalty=1, defense=1, avoid=1):
         self.x, self.y = (x, y)
+        self.type = "Grass"
         self.move_penalty = move_penalty
         self.defense = defense
         self.avoid = avoid
         self.friendly_occupied = False
         self.enemy_occupied = False
+
+    def get_visible_params(self):
+        d = {
+            "type": self.type,
+            "move_penalty": self.move_penalty,
+            "defense": self.defense,
+            "avoid": self.avoid
+        }
+        return d.items()
 
 
 class VictoryCondition(Enum):

@@ -1,6 +1,7 @@
 import pygame
 from view.tilemap import TileMap
 from view.cursor import Cursor
+from view.menu import Menu
 from model.gamemap import GameMap
 from controler.input_handler import InputHandler
 
@@ -17,6 +18,7 @@ class Level:
         self.tile_map = TileMap(tiled, self.map_screen)
         self.cursor = Cursor()
         self.input_handler = InputHandler(self)
+        self.menu = Menu(self.screen, self.info_panel)
 
     def set_cursor(self):
         scale_x = (self.game_map.x - self.tile_map.range[0][0]) * self.tile_map.scale
@@ -24,9 +26,10 @@ class Level:
         self.cursor.render(self.screen, scale_x, scale_y)
 
     def render(self):
-        self.tile_map.render(self.screen, self.map_screen, pygame.display.flip)
+        self.screen.fill((250, 250, 250), rect=self.info_panel)
+        self.tile_map.render(self.screen, self.map_screen)
         self.set_cursor()
-        self.screen.fill((0, 0, 0), rect=self.info_panel)
+        self.menu.render(self.game_map.get_current_tile())
         pygame.display.flip()
 
     def execute(self):

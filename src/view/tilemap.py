@@ -40,9 +40,8 @@ class TileMap:
                 tile_set.append(tile_source)
         return tile_set
 
-    def render(self, map_screen, rect, flip):
+    def render(self, map_screen, rect):
         map_screen.fill((255, 255, 255), rect)
-        flip()
         i = 0
         for x in range(*self.range[0]):
             j = 0
@@ -51,4 +50,3 @@ class TileMap:
                 tile.render(map_screen, i, j, rect)
                 j += 1
             i += 1
-        flip()
